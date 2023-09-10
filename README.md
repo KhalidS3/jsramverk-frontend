@@ -1,11 +1,11 @@
 # Jsramverk-frontend
 
-
-
-### Choose 
+### step by step to start the server for frontend
 ------------------------------------------------------
-- react
+- **to start the frontend website write:**
+  ```bash
+  python3 -m http.server 9000.
 
-### step by step
+### Choice of framework for creating frontend
 ------------------------------------------------------
-- to start the frontend website write python3 -m http.server 9000.
+- We choose React for our frontend
