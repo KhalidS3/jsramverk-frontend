@@ -1,4 +1,4 @@
-import { useEffect, React } from "react";
+import { useEffect } from "react";
 
 function TicketsList({ tickets }) {
   useEffect(() => {

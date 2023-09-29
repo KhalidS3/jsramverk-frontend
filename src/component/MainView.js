@@ -9,7 +9,7 @@ function MainView({ showMap, onShowMapToggle }) {
   const [showsMap, setShowMap] = useState(true);
 
   useEffect(() => {
-    fetch("https://jsramverk-trian-khsa16.azurewebsites.net/delayed")
+    fetch(" https://jsramverk-trian-khsa16.azurewebsites.net/delayed")
       .then((response) => response.json())
       .then((result) => setDelayedData(result.data || []))
       .catch((error) => console.log(error));
@@ -20,7 +20,7 @@ function MainView({ showMap, onShowMapToggle }) {
   const [lastTicketId, setLastTicketId] = useState(0);
 
   useEffect(() => {
-    fetch("https://jsramverk-trian-khsa16.azurewebsites.net/tickets")
+    fetch(" https://jsramverk-trian-khsa16.azurewebsites.net/tickets")
       .then((response) => response.json())
       .then((result) => {
         setTickets(result.data); // Updating tickets state
@@ -36,7 +36,7 @@ function MainView({ showMap, onShowMapToggle }) {
   }, []);
 
   const handleFormSubmit = (newTicket) => {
-    fetch("https://jsramverk-trian-khsa16.azurewebsites.net/tickets", {
+    fetch(" https://jsramverk-trian-khsa16.azurewebsites.net/tickets", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -50,7 +50,7 @@ function MainView({ showMap, onShowMapToggle }) {
         // Adjust the data structure to ensure consistency
         // This step may vary based on the exact shape of your server response
         const newTicketWithId = {
-          _id: data._id || data.data?._id, // Add other variations as needed
+          _id: data._id || data.data?.id, // Add other variations as needed
           ...newTicket,
           ...data.data // merge other properties from data.data if present
         };
@@ -64,6 +64,7 @@ function MainView({ showMap, onShowMapToggle }) {
           console.log("Updated Tickets:", updatedTickets); // log updated tickets array
           return updatedTickets; // return updated tickets array to update state
         });
+        setLastTicketId(newTicketWithId._id);
       })
       .catch((error) => console.error("Error:", error));
   };

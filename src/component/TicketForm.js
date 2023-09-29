@@ -17,15 +17,17 @@ function TicketForm({ onFormSubmit, reasonCodes, lastTicketId, selectedItem }) {
   // Update selectedTrainnumber and selectedTraindate when selectedItem changes
   useEffect(() => {
     if (selectedItem) {
+      console.log('Selected Item:', selectedItem);
       setSelectedTrainnumber(selectedItem.OperationalTrainNumber);
-      setSelectedTraindate(
-        selectedItem.EstimatedTimeAtLocation.substring(0, 10)
-      );
+      console.log('Set Train Number:', selectedItem.OperationalTrainNumber); // Add this line
+      setSelectedTraindate(selectedItem.EstimatedTimeAtLocation.substring(0, 10));
     }
   }, [selectedItem]);
 
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log('Selected Code:', selectedCode);
     console.log({
       _id: newTicketId,
       code: selectedCode,
