@@ -9,7 +9,7 @@ function MainView({ showMap, onShowMapToggle }) {
   const [showsMap, setShowMap] = useState(true);
 
   useEffect(() => {
-    fetch(" https://jsramverk-trian-khsa16.azurewebsites.net/delayed")
+    fetch("https://jsramverk-trian-khsa16.azurewebsites.net/delayed")
       .then((response) => response.json())
       .then((result) => setDelayedData(result.data || []))
       .catch((error) => console.log(error));
@@ -20,7 +20,7 @@ function MainView({ showMap, onShowMapToggle }) {
   const [lastTicketId, setLastTicketId] = useState(0);
 
   useEffect(() => {
-    fetch(" https://jsramverk-trian-khsa16.azurewebsites.net/tickets")
+    fetch("https://jsramverk-trian-khsa16.azurewebsites.net/tickets")
       .then((response) => response.json())
       .then((result) => {
         setTickets(result.data); // Updating tickets state
@@ -36,7 +36,7 @@ function MainView({ showMap, onShowMapToggle }) {
   }, []);
 
   const handleFormSubmit = (newTicket) => {
-    fetch(" https://jsramverk-trian-khsa16.azurewebsites.net/tickets", {
+    fetch("https://jsramverk-trian-khsa16.azurewebsites.net/tickets", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"

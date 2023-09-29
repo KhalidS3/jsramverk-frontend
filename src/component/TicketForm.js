@@ -6,28 +6,32 @@ function TicketForm({ onFormSubmit, reasonCodes, lastTicketId, selectedItem }) {
   const [selectedTraindate, setSelectedTraindate] = useState("");
   const [newTicketId, setNewTicketId] = useState(lastTicketId + 1);
 
-  const handleTrainNumberChange = (e) => {
-    setSelectedTrainnumber(e.target.value);
-  };
+  useEffect(() => {
+    if (reasonCodes && reasonCodes.length > 0) {
+      setSelectedCode(reasonCodes[0].Code); // Set the first code as default
+    }
+  }, [reasonCodes]);
 
-  const handleTrainDateChange = (e) => {
-    setSelectedTraindate(e.target.value);
-  };
-
-  // Update selectedTrainnumber and selectedTraindate when selectedItem changes
   useEffect(() => {
     if (selectedItem) {
       console.log('Selected Item:', selectedItem);
       setSelectedTrainnumber(selectedItem.OperationalTrainNumber);
-      console.log('Set Train Number:', selectedItem.OperationalTrainNumber); // Add this line
+      console.log('Set Train Number:', selectedItem.OperationalTrainNumber);
       setSelectedTraindate(selectedItem.EstimatedTimeAtLocation.substring(0, 10));
     }
   }, [selectedItem]);
 
+  useEffect(() => {
+    console.log('Selected Code:', selectedCode); // Log selectedCode whenever it changes
+  }, [selectedCode]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Selected Code:', selectedCode);
+    if (!selectedCode || !selectedTrainnumber || !selectedTraindate) {
+      // Add validation check
+      console.error('All fields are required!');
+      return;
+    }
     console.log({
       _id: newTicketId,
       code: selectedCode,
@@ -35,7 +39,6 @@ function TicketForm({ onFormSubmit, reasonCodes, lastTicketId, selectedItem }) {
       traindate: selectedTraindate
     });
     onFormSubmit({
-      // _id: newTicketId,
       code: selectedCode,
       trainnumber: selectedTrainnumber,
       traindate: selectedTraindate
@@ -55,7 +58,7 @@ function TicketForm({ onFormSubmit, reasonCodes, lastTicketId, selectedItem }) {
             setSelectedCode(selectedValue);
           }}
         >
-          {reasonCodes.map((code) => (
+          {reasonCodes && reasonCodes.map((code) => ( // Safely mapping over reasonCodes
             <option key={code.Code} value={code.Code}>
               {code.Code} - {code.Level3Description}
             </option>
@@ -66,7 +69,7 @@ function TicketForm({ onFormSubmit, reasonCodes, lastTicketId, selectedItem }) {
         <input
           type="text"
           value={selectedTrainnumber}
-          onChange={handleTrainNumberChange}
+          // onChange={handleTrainNumberChange}
           style={{ display: "none" }}
         />
       </div>
@@ -74,11 +77,13 @@ function TicketForm({ onFormSubmit, reasonCodes, lastTicketId, selectedItem }) {
         <input
           type="date"
           value={selectedTraindate}
-          onChange={handleTrainDateChange}
+          // onChange={handleTrainDateChange}
           style={{ display: "none" }}
         />
       </div>
-      <button type="submit">Skapa nytt ärende</button>
+      <button type="submit" disabled={!selectedCode || !selectedTrainnumber || !selectedTraindate}>
+        Skapa nytt ärende
+      </button>
     </form>
   );
 }
