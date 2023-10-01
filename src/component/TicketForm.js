@@ -1,5 +1,16 @@
 import React, {useEffect, useState} from 'react';
+import PropTypes from 'prop-types';
 
+/**
+ * TicketForm component for creating new tickets.
+ *
+ * @param {Object} props - The component props.
+ * @param {function} props.onFormSubmit - Function to handle form submission.
+ * @param {Array} props.reasonCodes - Array of reason codes.
+ * @param {number} props.lastTicketId - ID(_id) of the last ticket.
+ * @param {Object} props.selectedItem - Selected item.
+ * @return {Component} The TicketForm component.
+ */
 function TicketForm({onFormSubmit, reasonCodes, lastTicketId, selectedItem}) {
   const [selectedCode, setSelectedCode] = useState('');
   const [selectedTrainnumber, setSelectedTrainnumber] = useState('');
@@ -17,12 +28,14 @@ function TicketForm({onFormSubmit, reasonCodes, lastTicketId, selectedItem}) {
       console.log('Selected Item:', selectedItem);
       setSelectedTrainnumber(selectedItem.OperationalTrainNumber);
       console.log('Set Train Number:', selectedItem.OperationalTrainNumber);
-      setSelectedTraindate(selectedItem.EstimatedTimeAtLocation.substring(0, 10));
+      setSelectedTraindate(
+          selectedItem.EstimatedTimeAtLocation.substring(0, 10));
     }
   }, [selectedItem]);
 
   useEffect(() => {
-    console.log('Selected Code:', selectedCode); // Log selectedCode whenever it changes
+    // Log selectedCode whenever it changes
+    console.log('Selected Code:', selectedCode);
   }, [selectedCode]);
 
   const handleSubmit = (e) => {
@@ -58,7 +71,8 @@ function TicketForm({onFormSubmit, reasonCodes, lastTicketId, selectedItem}) {
             setSelectedCode(selectedValue);
           }}
         >
-          {reasonCodes && reasonCodes.map((code) => ( // Safely mapping over reasonCodes
+          {reasonCodes && reasonCodes.map((code) => (
+            // Safely mapping over reasonCodes
             <option key={code.Code} value={code.Code}>
               {code.Code} - {code.Level3Description}
             </option>
@@ -81,11 +95,20 @@ function TicketForm({onFormSubmit, reasonCodes, lastTicketId, selectedItem}) {
           style={{display: 'none'}}
         />
       </div>
-      <button type="submit" disabled={!selectedCode || !selectedTrainnumber || !selectedTraindate}>
+      <button type="submit" disabled={!selectedCode || !selectedTrainnumber ||
+        !selectedTraindate}>
         Skapa nytt ärende
       </button>
     </form>
   );
 }
+
+// PropTypes validation
+TicketForm.propTypes = {
+  onFormSubmit: PropTypes.func.isRequired,
+  reasonCodes: PropTypes.array.isRequired,
+  lastTicketId: PropTypes.number.isRequired,
+  selectedItem: PropTypes.object,
+};
 
 export default TicketForm;

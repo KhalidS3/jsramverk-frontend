@@ -1,19 +1,28 @@
-import React, {useEffect, useState} from 'react';
+import {useEffect} from 'react';
+import PropTypes from 'prop-types';
 
+/**
+ * Fetches codes from our remote server and calls the provided callback.
+ * @param {Object} props - The component's props.
+ * @param {Function} props.onCodesFetch - A callback function
+ * to handle the fetched codes.
+ * @return {null} Returns null because it doesn't render anything
+ */
 function CodeSelect({onCodesFetch}) {
-  const [codes, setCodes] = useState([]);
-
   useEffect(() => {
     fetch('https://jsramverk-trian-khsa16.azurewebsites.net/codes')
         .then((response) => response.json())
         .then((result) => {
-          setCodes(result.data);
           onCodesFetch(result.data);
         })
         .catch((error) => console.error('Error fetching codes:', error));
   }, [onCodesFetch]);
 
-  return null; // This component doesn't render anything to the DOM
+  return null;
 }
+
+CodeSelect.propTypes = {
+  onCodesFetch: PropTypes.func.isRequired,
+};
 
 export default CodeSelect;

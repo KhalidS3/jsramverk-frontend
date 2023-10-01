@@ -4,6 +4,7 @@ import L from 'leaflet';
 import {io} from 'socket.io-client';
 import '../App.css';
 import 'leaflet/dist/leaflet.css';
+import PropTypes from 'prop-types'; // Import PropTypes
 
 const defaultIcon = L.icon({
   iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
@@ -16,7 +17,13 @@ const defaultIcon = L.icon({
   shadowSize: [41, 41],
 });
 L.Marker.prototype.options.icon = defaultIcon;
-//
+
+/**
+ * Map component for displaying train markers on the map.
+ *
+ * @param {boolean} showMap - Indicates whether to show the map.
+ * @return {Object} An object containing marker objects on the map.
+ */
 function Map({showMap}) {
   const [markersData, setMarkersData] = useState({});
   const socketRef = useRef(null);
@@ -69,5 +76,10 @@ function Map({showMap}) {
     </div>
   );
 }
+
+// PropTypes validation
+Map.propTypes = {
+  showMap: PropTypes.bool.isRequired,
+};
 
 export default Map;

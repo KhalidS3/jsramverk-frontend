@@ -2,11 +2,19 @@ import React, {useEffect, useState} from 'react';
 import TicketForm from './TicketForm';
 import TicketsList from './TicketsList';
 import CodeSelect from './CodeSelect';
+import PropTypes from 'prop-types';
 
+/**
+ * Main view component for the application.
+ *
+ * @param {boolean} showMap - Indicates whether to show the map.
+ * @param {function} onShowMapToggle - Function to toggle the map.
+ * @return {Component} The component of the ticket from.
+ */
 function MainView({showMap, onShowMapToggle}) {
   const [delayedData, setDelayedData] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null);
-  const [showsMap, setShowMap] = useState(true);
+  // const [showsMap, setShowMap] = useState(true);
 
   useEffect(() => {
     fetch('https://jsramverk-trian-khsa16.azurewebsites.net/delayed')
@@ -46,23 +54,24 @@ function MainView({showMap, onShowMapToggle}) {
         .then((response) => response.json())
         .then((data) => {
           console.log('Server Response:', data); // log the server response
-
-          // Adjust the data structure to ensure consistency
-          // This step may vary based on the exact shape of your server response
           const newTicketWithId = {
-            _id: data._id || data.data?.id, // Add other variations as needed
+            _id: data._id || data.data?.id,
             ...newTicket,
-            ...data.data, // merge other properties from data.data if present
+            ...data.data, // merging other properties from data.data if present
           };
-
-          console.log('Adjusted New Ticket Data:', newTicketWithId); // log the adjusted new ticket data
+          // log the adjusted new ticket data
+          console.log('Adjusted New Ticket Data:', newTicketWithId);
 
           // Update tickets state with the new ticket that includes the _id
           setTickets((prevTickets) => {
-            console.log('Previous Tickets:', prevTickets); // log previous tickets within setTickets
-            const updatedTickets = [...prevTickets, newTicketWithId]; // Add the adjusted new ticket data
-            console.log('Updated Tickets:', updatedTickets); // log updated tickets array
-            return updatedTickets; // return updated tickets array to update state
+            // log previous tickets within setTickets
+            console.log('Previous Tickets:', prevTickets);
+            // Add the adjusted new ticket data
+            const updatedTickets = [...prevTickets, newTicketWithId];
+            // log updated tickets array
+            console.log('Updated Tickets:', updatedTickets);
+            // return updated tickets array to update state
+            return updatedTickets;
           });
           setLastTicketId(newTicketWithId._id);
         })
@@ -120,7 +129,8 @@ function MainView({showMap, onShowMapToggle}) {
     handleBackClick,
     newTicketId,
   }) => {
-    // Assuming newTicketId is passed as a prop or you have another way to retrieve or generate it
+    // Assuming newTicketId is passed as a prop
+    // or you have another way to retrieve or generate it
     console.log('items:', item);
     const fromLocation =
       item.FromLocation && item.FromLocation.length > 0 ?
@@ -156,6 +166,14 @@ function MainView({showMap, onShowMapToggle}) {
     );
   };
 
+  // Protypes validation for porps used in RenderTicketView
+  RenderTicketView.propTypes = {
+    item: PropTypes.object.isRequired,
+    outputDelay: PropTypes.func.isRequired,
+    handleBackClick: PropTypes.func.isRequired,
+    newTicketId: PropTypes.number.isRequired,
+  };
+
   return (
     <div className="delayed" data-testid="delayed-trains">
       {showMap && <div id="map"></div>}
@@ -164,7 +182,8 @@ function MainView({showMap, onShowMapToggle}) {
           item={selectedItem}
           outputDelay={outputDelay}
           handleBackClick={handleBackClick}
-          newTicketId={lastTicketId + 1} // Incrementing last ticket ID for a new ticket
+          // Incrementing last ticket ID for a new ticket
+          newTicketId={lastTicketId + 1}
         />
       ) : (
         renderDelayedTable(delayedData)
@@ -173,12 +192,18 @@ function MainView({showMap, onShowMapToggle}) {
       <TicketForm
         onFormSubmit={handleFormSubmit}
         reasonCodes={reasonCodes}
-        lastTicketId={lastTicketId + 1} // Incrementing last ticket ID for the form
+        // Incrementing last ticket ID for the form
+        lastTicketId={lastTicketId + 1}
         selectedItem={selectedItem}
       />
       <TicketsList tickets={tickets} />
     </div>
   );
 }
+
+MainView.propTypes = {
+  showMap: PropTypes.bool.isRequired,
+  onShowMapToggle: PropTypes.func.isRequired,
+};
 
 export default MainView;

@@ -3,6 +3,10 @@ import MainView from './component/MainView';
 import Map from './component/Map';
 import './App.css';
 
+/**
+ * Main application component.
+ * @return {JSX.Element} The JSX element representing the application.
+ */
 function App() {
   const [showMap, setShowMap] = useState(true);
 
