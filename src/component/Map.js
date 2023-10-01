@@ -1,40 +1,40 @@
-import React, { useEffect, useState, useRef } from "react";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import L from "leaflet";
-import { io } from "socket.io-client";
-import "../App.css";
-import "leaflet/dist/leaflet.css";
+import React, {useEffect, useState, useRef} from 'react';
+import {MapContainer, TileLayer, Marker, Popup} from 'react-leaflet';
+import L from 'leaflet';
+import {io} from 'socket.io-client';
+import '../App.css';
+import 'leaflet/dist/leaflet.css';
 
 const defaultIcon = L.icon({
-  iconRetinaUrl: require("leaflet/dist/images/marker-icon-2x.png"),
-  iconUrl: require("leaflet/dist/images/marker-icon.png"),
-  shadowUrl: require("leaflet/dist/images/marker-shadow.png"),
+  iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+  iconUrl: require('leaflet/dist/images/marker-icon.png'),
+  shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
   iconSize: [25, 41],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
   tooltipAnchor: [16, -28],
-  shadowSize: [41, 41]
+  shadowSize: [41, 41],
 });
 L.Marker.prototype.options.icon = defaultIcon;
 //
-function Map({ showMap }) {
+function Map({showMap}) {
   const [markersData, setMarkersData] = useState({});
   const socketRef = useRef(null);
   const mapRef = useRef(null);
 
   useEffect(() => {
-    socketRef.current = io("https://jsramverk-trian-khsa16.azurewebsites.net");
+    socketRef.current = io('https://jsramverk-trian-khsa16.azurewebsites.net');
 
-    socketRef.current.on("message", (data) => {
+    socketRef.current.on('message', (data) => {
       setMarkersData((prevMarkers) => {
-        const updatedMarkers = { ...prevMarkers };
+        const updatedMarkers = {...prevMarkers};
 
         if (updatedMarkers.hasOwnProperty(data.trainnumber)) {
           updatedMarkers[data.trainnumber].position = data.position;
         } else {
           updatedMarkers[data.trainnumber] = {
             position: data.position,
-            trainnumber: data.trainnumber
+            trainnumber: data.trainnumber,
           };
         }
 
@@ -48,11 +48,11 @@ function Map({ showMap }) {
   }, []);
 
   return (
-    <div className="map" style={{ display: showMap ? "block" : "none" }}>
+    <div className="map" style={{display: showMap ? 'block' : 'none'}}>
       <MapContainer
         center={[62.173276, 14.942265]}
         zoom={5}
-        style={{ height: "100vh", width: "100%" }}
+        style={{height: '100vh', width: '100%'}}
         whenCreated={(mapInstance) => (mapRef.current = mapInstance)}
       >
         <TileLayer

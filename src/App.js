@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import MainView from "./component/MainView";
-import Map from "./component/Map";
-import "./App.css";
+import React, {useState} from 'react';
+import MainView from './component/MainView';
+import Map from './component/Map';
+import './App.css';
 
 function App() {
   const [showMap, setShowMap] = useState(true);

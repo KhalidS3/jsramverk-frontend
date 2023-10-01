@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from "react";
-import TicketForm from "./TicketForm";
-import TicketsList from "./TicketsList";
-import CodeSelect from "./CodeSelect";
+import React, {useEffect, useState} from 'react';
+import TicketForm from './TicketForm';
+import TicketsList from './TicketsList';
+import CodeSelect from './CodeSelect';
 
-function MainView({ showMap, onShowMapToggle }) {
+function MainView({showMap, onShowMapToggle}) {
   const [delayedData, setDelayedData] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null);
   const [showsMap, setShowMap] = useState(true);
 
   useEffect(() => {
-    fetch("https://jsramverk-trian-khsa16.azurewebsites.net/delayed")
-      .then((response) => response.json())
-      .then((result) => setDelayedData(result.data || []))
-      .catch((error) => console.log(error));
+    fetch('https://jsramverk-trian-khsa16.azurewebsites.net/delayed')
+        .then((response) => response.json())
+        .then((result) => setDelayedData(result.data || []))
+        .catch((error) => console.log(error));
   }, []);
 
   const [tickets, setTickets] = useState([]);
@@ -20,58 +20,58 @@ function MainView({ showMap, onShowMapToggle }) {
   const [lastTicketId, setLastTicketId] = useState(0);
 
   useEffect(() => {
-    fetch("https://jsramverk-trian-khsa16.azurewebsites.net/tickets")
-      .then((response) => response.json())
-      .then((result) => {
-        setTickets(result.data); // Updating tickets state
-        // Finding and setting the ID of the last ticket
-        console.log("Fetched tickets:", result.data); // log the fetched data
-        const lastId = result.data.length
-          ? result.data[result.data.length - 1]._id
-          : 0;
-        console.log("Last ID:", lastId);
-        setLastTicketId(lastId);
-      })
-      .catch((error) => console.error("Error fetching tickets:", error));
+    fetch('https://jsramverk-trian-khsa16.azurewebsites.net/tickets')
+        .then((response) => response.json())
+        .then((result) => {
+          setTickets(result.data); // Updating tickets state
+          // Finding and setting the ID of the last ticket
+          console.log('Fetched tickets:', result.data); // log the fetched data
+          const lastId = result.data.length ?
+          result.data[result.data.length - 1]._id :
+          0;
+          console.log('Last ID:', lastId);
+          setLastTicketId(lastId);
+        })
+        .catch((error) => console.error('Error fetching tickets:', error));
   }, []);
 
   const handleFormSubmit = (newTicket) => {
-    fetch("https://jsramverk-trian-khsa16.azurewebsites.net/tickets", {
-      method: "POST",
+    fetch('https://jsramverk-trian-khsa16.azurewebsites.net/tickets', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json"
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify(newTicket)
+      body: JSON.stringify(newTicket),
     })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Server Response:", data); // log the server response
+        .then((response) => response.json())
+        .then((data) => {
+          console.log('Server Response:', data); // log the server response
 
-        // Adjust the data structure to ensure consistency
-        // This step may vary based on the exact shape of your server response
-        const newTicketWithId = {
-          _id: data._id || data.data?.id, // Add other variations as needed
-          ...newTicket,
-          ...data.data // merge other properties from data.data if present
-        };
+          // Adjust the data structure to ensure consistency
+          // This step may vary based on the exact shape of your server response
+          const newTicketWithId = {
+            _id: data._id || data.data?.id, // Add other variations as needed
+            ...newTicket,
+            ...data.data, // merge other properties from data.data if present
+          };
 
-        console.log("Adjusted New Ticket Data:", newTicketWithId); // log the adjusted new ticket data
+          console.log('Adjusted New Ticket Data:', newTicketWithId); // log the adjusted new ticket data
 
-        // Update tickets state with the new ticket that includes the _id
-        setTickets((prevTickets) => {
-          console.log("Previous Tickets:", prevTickets); // log previous tickets within setTickets
-          const updatedTickets = [...prevTickets, newTicketWithId]; // Add the adjusted new ticket data
-          console.log("Updated Tickets:", updatedTickets); // log updated tickets array
-          return updatedTickets; // return updated tickets array to update state
-        });
-        setLastTicketId(newTicketWithId._id);
-      })
-      .catch((error) => console.error("Error:", error));
+          // Update tickets state with the new ticket that includes the _id
+          setTickets((prevTickets) => {
+            console.log('Previous Tickets:', prevTickets); // log previous tickets within setTickets
+            const updatedTickets = [...prevTickets, newTicketWithId]; // Add the adjusted new ticket data
+            console.log('Updated Tickets:', updatedTickets); // log updated tickets array
+            return updatedTickets; // return updated tickets array to update state
+          });
+          setLastTicketId(newTicketWithId._id);
+        })
+        .catch((error) => console.error('Error:', error));
   };
 
   const outputDelay = (item) => {
-    let advertised = new Date(item.AdvertisedTimeAtLocation);
-    let estimated = new Date(item.EstimatedTimeAtLocation);
+    const advertised = new Date(item.AdvertisedTimeAtLocation);
+    const estimated = new Date(item.EstimatedTimeAtLocation);
     const diff = Math.abs(estimated - advertised);
     return Math.floor(diff / (1000 * 60));
   };
@@ -89,16 +89,16 @@ function MainView({ showMap, onShowMapToggle }) {
   const renderDelayedTable = (data) => (
     <div className="delayed-trains">
       {data.map((item) => {
-        let locationElement = item.FromLocation &&
+        const locationElement = item.FromLocation &&
           item.FromLocation.length > 0 &&
           item.ToLocation &&
           item.ToLocation.length > 0 && (
-            <h3>
-              Train from {item.FromLocation[0].LocationName} to{" "}
-              {item.ToLocation[0].LocationName}. Currently at{" "}
-              {item.LocationSignature}.
-            </h3>
-          );
+          <h3>
+              Train from {item.FromLocation[0].LocationName} to{' '}
+            {item.ToLocation[0].LocationName}. Currently at{' '}
+            {item.LocationSignature}.
+          </h3>
+        );
 
         return (
           <div
@@ -118,19 +118,19 @@ function MainView({ showMap, onShowMapToggle }) {
     item,
     outputDelay,
     handleBackClick,
-    newTicketId
+    newTicketId,
   }) => {
     // Assuming newTicketId is passed as a prop or you have another way to retrieve or generate it
-    console.log("items:", item);
-    let fromLocation =
-      item.FromLocation && item.FromLocation.length > 0
-        ? item.FromLocation[0].LocationName
-        : "";
-    let toLocation =
-      item.ToLocation && item.ToLocation.length > 0
-        ? item.ToLocation[0].LocationName
-        : "";
-    let currentLocation = item.LocationSignature || "";
+    console.log('items:', item);
+    const fromLocation =
+      item.FromLocation && item.FromLocation.length > 0 ?
+        item.FromLocation[0].LocationName :
+        '';
+    const toLocation =
+      item.ToLocation && item.ToLocation.length > 0 ?
+        item.ToLocation[0].LocationName :
+        '';
+    const currentLocation = item.LocationSignature || '';
 
     return (
       <div className="ticket-container">
@@ -141,7 +141,7 @@ function MainView({ showMap, onShowMapToggle }) {
           <h1>Nytt ärende #{newTicketId}</h1> {/* Adjusted here */}
           {fromLocation && toLocation && (
             <p>
-              Tåg från {fromLocation} till {toLocation}. Just nu i{" "}
+              Tåg från {fromLocation} till {toLocation}. Just nu i{' '}
               {currentLocation}.
             </p>
           )}

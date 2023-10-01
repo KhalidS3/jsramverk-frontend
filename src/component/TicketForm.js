@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from 'react';
 
-function TicketForm({ onFormSubmit, reasonCodes, lastTicketId, selectedItem }) {
-  const [selectedCode, setSelectedCode] = useState("");
-  const [selectedTrainnumber, setSelectedTrainnumber] = useState("");
-  const [selectedTraindate, setSelectedTraindate] = useState("");
+function TicketForm({onFormSubmit, reasonCodes, lastTicketId, selectedItem}) {
+  const [selectedCode, setSelectedCode] = useState('');
+  const [selectedTrainnumber, setSelectedTrainnumber] = useState('');
+  const [selectedTraindate, setSelectedTraindate] = useState('');
   const [newTicketId, setNewTicketId] = useState(lastTicketId + 1);
 
   useEffect(() => {
@@ -36,12 +36,12 @@ function TicketForm({ onFormSubmit, reasonCodes, lastTicketId, selectedItem }) {
       _id: newTicketId,
       code: selectedCode,
       trainnumber: selectedTrainnumber,
-      traindate: selectedTraindate
+      traindate: selectedTraindate,
     });
     onFormSubmit({
       code: selectedCode,
       trainnumber: selectedTrainnumber,
-      traindate: selectedTraindate
+      traindate: selectedTraindate,
     });
     setNewTicketId(newTicketId + 1);
   };
@@ -54,7 +54,7 @@ function TicketForm({ onFormSubmit, reasonCodes, lastTicketId, selectedItem }) {
           value={selectedCode}
           onChange={(e) => {
             const selectedValue = e.target.value;
-            console.log("e.target.value:", selectedValue);
+            console.log('e.target.value:', selectedValue);
             setSelectedCode(selectedValue);
           }}
         >
@@ -69,16 +69,16 @@ function TicketForm({ onFormSubmit, reasonCodes, lastTicketId, selectedItem }) {
         <input
           type="text"
           value={selectedTrainnumber}
-          // onChange={handleTrainNumberChange}
-          style={{ display: "none" }}
+          readOnly={true}
+          style={{display: 'none'}}
         />
       </div>
       <div>
         <input
           type="date"
           value={selectedTraindate}
-          // onChange={handleTrainDateChange}
-          style={{ display: "none" }}
+          readOnly={true}
+          style={{display: 'none'}}
         />
       </div>
       <button type="submit" disabled={!selectedCode || !selectedTrainnumber || !selectedTraindate}>

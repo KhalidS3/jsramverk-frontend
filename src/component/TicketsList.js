@@ -1,8 +1,8 @@
-import { useEffect } from "react";
+import {useEffect} from 'react';
 
-function TicketsList({ tickets }) {
+function TicketsList({tickets}) {
   useEffect(() => {
-    console.log("Tickets Updated:", tickets);
+    console.log('Tickets Updated:', tickets);
   }, [tickets]);
 
   return (
