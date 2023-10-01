@@ -8,7 +8,7 @@ import CodeSelect from '../component/CodeSelect';
 describe('MainView Komponent', () => {
   it('renderar utan fel', () => {
     // Rendera MainView-komponenten
-    const {getByTestId} = render(<MainView />);
+    const {getByTestId} = render(<MainView showMap={true} onShowMapToggle={() => {}}/>);
 
     // Hämta huvudkomponenten för MainView med hjälp av ett test-ID
     const mainViewComponent = getByTestId('delayed-trains');
@@ -31,6 +31,6 @@ describe('MainView Komponent', () => {
 describe('CodeSelect Komponent', () => {
   it('renderar utan fel', () => {
     // Rendera CodeSelect-komponenten
-    render(<CodeSelect />);
+    render(<CodeSelect onCodesFetch={() => {}}/>);
   });
 });
