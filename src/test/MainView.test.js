@@ -8,7 +8,8 @@ import CodeSelect from '../component/CodeSelect';
 describe('MainView Komponent', () => {
   it('renderar utan fel', () => {
     // Rendera MainView-komponenten
-    const {getByTestId} = render(<MainView showMap={true} onShowMapToggle={() => {}}/>);
+    const {getByTestId} = render(<MainView showMap={true}
+      onShowMapToggle={() => {}}/>);
 
     // Hämta huvudkomponenten för MainView med hjälp av ett test-ID
     const mainViewComponent = getByTestId('delayed-trains');
