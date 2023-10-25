@@ -30,7 +30,7 @@ function Map({showMap}) {
   const mapRef = useRef(null);
 
   useEffect(() => {
-    socketRef.current = io('https://jsramverk-trian-khsa16.azurewebsites.net');
+    socketRef.current = io('http://localhost:1337');
 
     socketRef.current.on('message', (data) => {
       setMarkersData((prevMarkers) => {

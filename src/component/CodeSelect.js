@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
  */
 function CodeSelect({onCodesFetch}) {
   useEffect(() => {
-    fetch('https://jsramverk-trian-khsa16.azurewebsites.net/codes')
+    fetch('http://localhost:1337/codes')
         .then((response) => response.json())
         .then((result) => {
           onCodesFetch(result.data);

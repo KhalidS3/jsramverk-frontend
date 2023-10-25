@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import TicketForm from './TicketForm';
 import TicketsList from './TicketsList';
 import CodeSelect from './CodeSelect';
+import UpdateTicketForm from './UpdateTicketForm';
 import PropTypes from 'prop-types';
 
 /**
@@ -17,7 +18,7 @@ function MainView({showMap, onShowMapToggle}) {
   // const [showsMap, setShowMap] = useState(true);
 
   useEffect(() => {
-    fetch('https://jsramverk-trian-khsa16.azurewebsites.net/delayed')
+    fetch('http://localhost:1337/delayed')
         .then((response) => response.json())
         .then((result) => setDelayedData(result.data || []))
         .catch((error) => console.log(error));
@@ -28,7 +29,7 @@ function MainView({showMap, onShowMapToggle}) {
   const [lastTicketId, setLastTicketId] = useState(0);
 
   useEffect(() => {
-    fetch('https://jsramverk-trian-khsa16.azurewebsites.net/tickets')
+    fetch('http://localhost:1337/tickets')
         .then((response) => response.json())
         .then((result) => {
           setTickets(result.data); // Updating tickets state
@@ -44,7 +45,7 @@ function MainView({showMap, onShowMapToggle}) {
   }, []);
 
   const handleFormSubmit = (newTicket) => {
-    fetch('https://jsramverk-trian-khsa16.azurewebsites.net/tickets', {
+    fetch('http://localhost:1337/tickets', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -77,6 +78,37 @@ function MainView({showMap, onShowMapToggle}) {
         })
         .catch((error) => console.error('Error:', error));
   };
+
+  const [editingTicket, setEditingTicket] = useState(null);
+
+  const handleEditClick = (ticket) => {
+    setEditingTicket(ticket);
+  };
+
+  const handleUpdateSubmit = (updatedTicketData) => {
+    console.log('updatedTicketData', updatedTicketData);
+    fetch(`http://localhost:1337/tickets/${updatedTicketData.id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(updatedTicketData),
+    })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then((data) => {
+          setEditingTicket(null);
+        })
+        .catch((error) => {
+          console.error('There was a problem with the fetch operation:',
+              error.message);
+        });
+  };
+
 
   const outputDelay = (item) => {
     const advertised = new Date(item.AdvertisedTimeAtLocation);
@@ -196,7 +228,17 @@ function MainView({showMap, onShowMapToggle}) {
         lastTicketId={lastTicketId + 1}
         selectedItem={selectedItem}
       />
-      <TicketsList tickets={tickets} />
+      {editingTicket ? (
+        <UpdateTicketForm
+          ticketToUpdate={editingTicket}
+          onUpdate={handleUpdateSubmit}
+          reasonCodes={reasonCodes}
+        />
+      ) : (
+        <>
+          <TicketsList tickets={tickets} onEditClick={handleEditClick}/>
+        </>
+      )}
     </div>
   );
 }
